@@ -20,7 +20,7 @@ def puzzle2(pass_list):
     return len(list(filter(valid_puzzle2, pass_list)))
 
 r = r"(?P<a>\d+)-(?P<b>\d+)\s(?P<l>\w)\:\s(?P<pass>[^\n]+)"
-pass_list = [m.groupdict() for m in re.finditer(r, read_input(__file__))]
+pass_list = [m.groupdict() for m in re.finditer(r, read_input(2020, 2))]
 
 print("Puzzle 1: {}".format(puzzle1(pass_list)))
 print("Puzzle 2: {}".format(puzzle2(pass_list)))

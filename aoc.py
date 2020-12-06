@@ -1,11 +1,7 @@
 # boiler plate
-def read_input(filename):
-    import os
+def read_input(year, day):
     import requests
     import yaml
-    
-    date, _ = os.path.splitext(os.path.basename(filename))
-    year, day = date.split("-")
     
     with open("cookies.yaml", "rt") as f:
         cookies = yaml.load(f, yaml.FullLoader)

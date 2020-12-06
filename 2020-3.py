@@ -22,7 +22,7 @@ def puzzle2(field):
             count_trees(field, slope=(1, 2))
     )
 
-field = read_input(__file__).split()
+field = read_input(2020, 3).split()
 
 print("Puzzle 1: {}".format(puzzle1(field)))
 print("Puzzle 2: {}".format(puzzle2(field)))

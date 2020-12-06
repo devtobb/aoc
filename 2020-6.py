@@ -13,7 +13,7 @@ def puzzle1(groups):
 def puzzle2(groups):
     return group_reduce(groups, lambda a,b:a&b)
 
-raw = read_input(__file__).split('\n\n')
+raw = read_input(2020, 6).split('\n\n')
 groups = [list(map(lambda a:set(a), group.split())) for group in raw]
 
 print("Puzzle 1: {}".format(puzzle1(groups)))

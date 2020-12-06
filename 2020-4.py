@@ -14,7 +14,7 @@ def puzzle2(passports, valid):
                 for passport in passports
     )
 
-raw = read_input(__file__).split('\n\n')
+raw = read_input(2020, 4).split('\n\n')
 passports = [dict(re.findall(r"(\S{3})\:(\S+)", p)) for p in raw]
 
 valid = dict(

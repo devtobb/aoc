@@ -40,7 +40,7 @@ def puzzle2(entries):
     return entries[upper] * entries[lower1] * entries[lower2]
 
 
-entries = sorted(map(int, read_input(__file__).split()))
+entries = sorted(map(int, read_input(2020, 1).split()))
 
 print("Puzzle 1: {}".format(puzzle1(entries)))
 print("Puzzle 2: {}".format(puzzle2(entries)))

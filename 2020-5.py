@@ -16,7 +16,7 @@ def puzzle2(ss):
     (idx, *_), *_ = np.where(ss[1:]-ss[:-1] == 2)
     return ss[idx] + 1
 
-ss = sorted_seats(read_input(__file__).split())
+ss = sorted_seats(read_input(2020, 5).split())
 
 print("Puzzle 1: {}".format(puzzle1(ss)))
 print("Puzzle 2: {}".format(puzzle2(ss)))
