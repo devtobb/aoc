@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from aoc import read_input
 
 def count_trees(field, slope=(3, 1)):
