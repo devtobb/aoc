@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import pathlib
 import os
 
@@ -37,3 +39,54 @@ def read_remote(year, day):
         )
     
     return r.text
+
+def file_from_template(args):
+    with open(args.template, 'rt') as f:
+        template = f.read()
+
+    content = template.format(year=args.year, day=args.day)
+
+    with open(args.file, 'wt') as f:
+        f.write(content)
+    
+if __name__ == "__main__":
+    
+    import argparse
+    import datetime
+
+    path = os.path.dirname(__file__)
+    template = os.path.join(path, 'template.py')
+    now = datetime.datetime.now()
+    filename = os.path.join(path, "{year}-{day:02d}.py".format(year=now.year, day=now.day))
+
+    parser = argparse.ArgumentParser(description="Creates a python file for an advent of code day from a template.")
+        
+    parser.add_argument(
+        "-t", 
+        "--template",
+        help="Location of the template file to use. Defaults to {}".format(template), 
+        default=template)
+
+    parser.add_argument(
+        "-f", 
+        "--file",
+        help="Location of the file to create. Defaults to year-day.py ({})".format(filename), 
+        default=filename)
+
+    parser.add_argument(
+        "-y", 
+        "--year", 
+        type=int, 
+        help="The year for which to initalize the template. Defaults to current year ({})".format(now.year), 
+        default=now.year)
+
+    parser.add_argument(
+        "-d", 
+        "--day", 
+        type=int, 
+        help="The day for which to initalize the template. Defaults to current day ({:02d})".format(now.day), 
+        default=now.day)
+
+    args = parser.parse_args()
+
+    file_from_template(args)
