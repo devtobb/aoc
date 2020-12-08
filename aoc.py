@@ -41,13 +41,16 @@ def read_remote(year, day):
     return r.text
 
 def file_from_template(args):
-    with open(args.template, 'rt') as f:
-        template = f.read()
+    if not os.path.isfile(args.file):
+        with open(args.template, 'rt') as f:
+            template = f.read()
 
-    content = template.format(year=args.year, day=args.day)
+        content = template.format(year=args.year, day=args.day)
 
-    with open(args.file, 'wt') as f:
-        f.write(content)
+        with open(args.file, 'wt') as f:
+            f.write(content)
+    else:
+        print("File {} already exists. Doing nothing.".format(args.file))
     
 if __name__ == "__main__":
     
