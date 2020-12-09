@@ -8,7 +8,6 @@ def puzzle1(nums):
                                 for b in range(a+1, n))]                                                                                                
     return nums[invalid]
 
-
 def puzzle2(nums, invalid):
     lower = upper = 0
     s = nums[lower]
@@ -20,8 +19,6 @@ def puzzle2(nums, invalid):
             upper = lower
             s = nums[lower]
     return min(nums[lower:upper+1]) + max(nums[lower:upper+1])
-
-
 
 raw = read_input(2020, 9)
 nums = list(map(int, raw.split()))
