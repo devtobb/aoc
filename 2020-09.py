@@ -5,7 +5,7 @@ def puzzle1(nums):
                     if nums[n] not in 
                         (nums[a]+nums[b] 
                             for a in range(n-25, n) 
-                                for b in range(a+1, n))]                                                                                                
+                                for b in range(a+1, n))]
     return nums[invalid]
 
 def puzzle2(nums, invalid):
