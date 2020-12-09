@@ -1,7 +1,3 @@
-from itertools import product
-
-import numpy as np
-
 from aoc import read_input
 
 def puzzle1(nums):
