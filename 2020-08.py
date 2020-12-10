@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from itertools import chain, repeat
 
 from aoc import read_input
