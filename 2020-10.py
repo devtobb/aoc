@@ -1,30 +1,25 @@
 #!/usr/bin/env python3
 
-import numpy as np
-
 from aoc import read_input
 
-def puzzle1(ad):
-    ad = np.array(ad)
-    delta = ad[1:] - ad[:-1]
-    return sum(delta==1) * sum(delta==3)
+def puzzle1(adapters):
+    delta = [a-b for a, b in zip(adapters[1:], adapters[:-1])] 
+    return sum(d==1 for d in delta) * sum(d==3 for d in delta)
 
-def puzzle2(ad):
-    incoming = [0]*len(ad)
-    for n in range(len(ad)):
-        incoming[n] = [i for i in range(max(0, n-3), max(0, n)) if ad[n] - ad[i] <=3]
-
-    pp = [0]*len(incoming)
-    pp[0] = 1
+def puzzle2(adapters):
+    incoming = [[i for i in range(max(0, n-3),  n) if adapters[n] - adapters[i]<=3] for n in range(len(adapters))]
+    
+    possible_paths = [0]*len(adapters)
+    possible_paths[0] = 1
     for n in range(1, len(incoming)): 
-        pp[n] = sum(pp[i] for i in incoming[n])
+        possible_paths[n] = sum(possible_paths[i] for i in incoming[n])
 
-    return pp[-1]
+    return possible_paths[-1]
 
 raw = read_input(2020, 10)
-ad = sorted(list(map(int, raw.split())))
-*_, mx = ad
-ad = [0] + ad + [mx+3]
+adapters = sorted(list(map(int, raw.split())))
+*_, maxi = adapters
+adapters = [0] + adapters + [maxi+3]
 
-print("Puzzle 1: {}".format(puzzle1(ad)))
-print("Puzzle 2: {}".format(puzzle2(ad)))
+print("Puzzle 1: {}".format(puzzle1(adapters)))
+print("Puzzle 2: {}".format(puzzle2(adapters)))
