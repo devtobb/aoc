@@ -11,10 +11,10 @@ def apply_rules(occupied, seats):
                      [1,1,1]])
     
     neighbors = convolve2d(occupied, mask, mode='same')
-    staying = occupied * (neighbors<4) * seats
-    sitting = (occupied==0) * (neighbors==0) * seats
+    staying = occupied * (neighbors<4)
+    sitting = (occupied==0) * (neighbors==0)
     
-    return staying + sitting
+    return (staying + sitting) * seats
 
 def puzzle1(seats):
     occupied = np.zeros(seats.shape)
