@@ -1,76 +1,32 @@
 #!/usr/bin/env python3
-from math import sin, cos, pi, radians, atan2
 
 from aoc import read_input
+from collections import defaultdict
+from functools import reduce
+from numpy import eye, dot
 
+sgn = dict(N=1j,S=-1j,E=1,W=-1,R=-1,L=1,F=1)
+pos = [defaultdict(lambda:(2,0),R=(1,1),L=(1,1),F=(1,0)),
+       defaultdict(lambda:(2,1),R=(1,1),L=(1,1),F=(1,0))]
+fnc = defaultdict(lambda:lambda s,m:m*s, 
+            R=lambda s,m:1j**(s*m/90), L=lambda s,m:1j**(s*m/90))
 
-def execute(instr, x, y, d):
-    direction, magnitude = instr
+def afftrans(i, m, puzzle):
+    mat = eye(3, dtype=complex)
+    mat[pos[puzzle][i]]=fnc[i](sgn[i], m)
+    return mat
 
-    if direction == 'N':
-        y += magnitude
-    elif direction == 'S':
-        y -= magnitude
-    elif direction == 'E':
-        x += magnitude
-    elif direction == 'W':
-        x -= magnitude
-    elif direction == 'L':
-        d += magnitude
-    elif direction == 'R':
-        d -= magnitude
-    elif direction == 'F':
-        x += round(cos(radians(d)) * magnitude)
-        y += round(sin(radians(d)) * magnitude)
+def transform(instr, start, puzzle):
+    dest, *_= dot(start, reduce(dot, (afftrans(i,m,puzzle) for (i,m) in instr)))
+    return  int(abs(dest.imag) + abs(dest.real))
 
-    return x, y, d
+def puzzle1(instr):
+    return transform(instr, [0,1,1], 0)
 
-def execute_relative(instr, x, y, wx, wy):
-    direction, magnitude = instr
+def puzzle2(instr):
+    return transform(instr, [0,10+1j,1], 1)
 
-    if direction == 'N':
-        wy += magnitude
-    elif direction == 'S':
-        wy -= magnitude
-    elif direction == 'E':
-        wx += magnitude
-    elif direction == 'W':
-        wx -= magnitude
-    elif direction == 'L':
-        angle = atan2(wy, wx)
-        dist = (wx**2 + wy**2) ** 0.5
-        wx = round(cos(radians(magnitude) + angle) * dist)
-        wy = round(sin(radians(magnitude) + angle) * dist)
-    elif direction == 'R':
-        angle = atan2(wy, wx)
-        dist = (wx**2 + wy**2) ** 0.5
-        wx = round(cos(-radians(magnitude) + angle) * dist)
-        wy = round(sin(-radians(magnitude) + angle) * dist)
-    elif direction == 'F':
-        x += wx * magnitude
-        y += wy * magnitude
+instr = [(row[0], int(row[1:])) for row in read_input(2020, 12).split()]
 
-    return x, y, wx, wy
-
-def puzzle1(instructions):
-    x = y = d = 0
-    for instr in instructions:
-        x, y, d = execute(instr, x, y, d)
-    
-    return abs(x) + abs(y)
-
-def puzzle2(instructions):
-    x = y =  0
-    wx = 10
-    wy = 1
-    for instr in instructions:
-        x, y, wx, wy = execute_relative(instr, x, y, wx, wy)
-        # print("Instr: {} Ship : ({}, {}) Waypoint: ({}, {})".format(instr, x, y, wx, wy))
-    
-    return abs(x) + abs(y)
-
-raw = read_input(2020, 12)
-instructions = [(row[0], int(row[1:])) for row in raw.split()]
-
-print("Puzzle 1: {}".format(puzzle1(instructions)))
-print("Puzzle 2: {}".format(puzzle2(instructions)))
+print("Puzzle 1: {}".format(puzzle1(instr)))
+print("Puzzle 2: {}".format(puzzle2(instr)))
