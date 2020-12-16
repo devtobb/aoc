@@ -10,5 +10,5 @@ def puzzle2():
 
 raw = read_input({year}, {day})
 
-print("Puzzle 1: {{}}".format(puzzle1()))
-print("Puzzle 2: {{}}".format(puzzle2()))
+print(f"Puzzle 1: {{puzzle1()}}")
+print(f"Puzzle 2: {{puzzle2()}}")
