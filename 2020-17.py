@@ -11,13 +11,12 @@ def trim(arr):
 
 def step(grid):
     grid_new = np.zeros(np.array(grid.shape) + 2, int)
-    shape_old = grid.shape
-    shape_new = grid_new.shape
-    for coords in product(*(range(n) for n in shape_new)):
-        neigh = tuple([slice(max(0,c-2), min(s,c+1)) for c, s in zip(coords, shape_old)])
-        coords_old = tuple(np.array(coords)-1)
-        
-        if all(0<=c<s for c, s in zip(coords_old, shape_old)):
+
+    for coords in product(*(range(n) for n in grid_new.shape)):
+        neigh = tuple([slice(max(0,c-2), min(s,c+1)) for c, s in zip(coords, grid.shape)])
+        coords_old = tuple(np.array(coords) - 1)
+
+        if all(0<=c<s for c, s in zip(coords_old, grid.shape)):
             value_old = grid[coords_old]
         else:
             value_old = 0
