@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import regex as re
+from math import ceil
+import re
 
 from aoc import read_input
 
@@ -20,6 +21,18 @@ def rules_to_regex(rules):
 
     return rules
 
+def min_chars_from_rule(rule, rules):
+    if not re.match(r'.*\d+.*', rules[rule]):
+        return 1
+    
+    alternatives = rules[rule].split('|')
+
+    sums = []
+    for alternative in alternatives:
+        sums.append(sum(min_chars_from_rule(rule, rules) for rule in re.findall(r'\d+', alternative)))
+    
+    return min(sums)
+
 def count_matches(rules, messages):
     rules = rules_to_regex(rules.copy())
     return sum(re.fullmatch(rules['0'], message) is not None for message in messages)
@@ -28,8 +41,11 @@ def puzzle1(rules, messages):
     return count_matches(rules, messages)
 
 def puzzle2(rules, messages):
+    max_word_len = max(len(m) for m in messages)
+    max_rec_depth = max_word_len // (min_chars_from_rule('42', rules) + min_chars_from_rule('31', rules)) + 1
+
     rules['8'] = '(42)+'
-    rules['11'] = '|'.join('(42)'*n+'(31)'*n for n in range(1, 6))
+    rules['11'] = '|'.join('(42)'*n+'(31)'*n for n in range(1, max_rec_depth))
     return count_matches(rules, messages)
 
 
