@@ -21,17 +21,12 @@ def rules_to_regex(rules):
 
     return rules
 
-def min_chars_from_rule(rule, rules):
+def min_chars(rule, rules):
     if not re.match(r'.*\d+.*', rules[rule]):
         return 1
+    alts = rules[rule].split('|')
+    return min((sum(min_chars(r, rules) for r in re.findall(r'\d+', a))) for a in alts)
     
-    alternatives = rules[rule].split('|')
-
-    sums = []
-    for alternative in alternatives:
-        sums.append(sum(min_chars_from_rule(rule, rules) for rule in re.findall(r'\d+', alternative)))
-    
-    return min(sums)
 
 def count_matches(rules, messages):
     rules = rules_to_regex(rules.copy())
@@ -41,11 +36,11 @@ def puzzle1(rules, messages):
     return count_matches(rules, messages)
 
 def puzzle2(rules, messages):
-    max_word_len = max(len(m) for m in messages)
-    max_rec_depth = max_word_len // (min_chars_from_rule('42', rules) + min_chars_from_rule('31', rules)) + 1
+    max_msg_len = max(len(m) for m in messages)
+    max_rec_depth = max_msg_len // (min_chars('42', rules) + min_chars('31', rules))
 
     rules['8'] = '(42)+'
-    rules['11'] = '|'.join('(42)'*n+'(31)'*n for n in range(1, max_rec_depth))
+    rules['11'] = '|'.join('(42)'*n+'(31)'*n for n in range(1, max_rec_depth+1))
     return count_matches(rules, messages)
 
 
