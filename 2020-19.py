@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from math import ceil
 import re
 
 from aoc import read_input
