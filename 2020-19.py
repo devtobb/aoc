@@ -24,7 +24,7 @@ def min_chars(rule, rules):
     if not re.match(r'.*\d+.*', rules[rule]):
         return 1
     alts = rules[rule].split('|')
-    return min((sum(min_chars(r, rules) for r in re.findall(r'\d+', a))) for a in alts)
+    return min(sum(min_chars(r, rules) for r in re.findall(r'\d+', a)) for a in alts)
     
 
 def count_matches(rules, messages):
