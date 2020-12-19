@@ -29,7 +29,8 @@ def min_chars(rule, rules):
 
 def count_matches(rules, messages):
     rules = rules_to_regex(rules.copy())
-    return sum(re.fullmatch(rules['0'], message) is not None for message in messages)
+    pattern = re.compile(rules['0'])
+    return sum(pattern.fullmatch(message) is not None for message in messages)
 
 def puzzle1(rules, messages):
     return count_matches(rules, messages)
