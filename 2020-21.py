@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 
-from functools import reduce
-from operator import and_
 import re
 
 from aoc import read_input
 
 def get_map(foods, algs):
-    possbl = [(a, set(reduce(and_, (set(ingrs) for (ingrs, algs) in foods if a in algs)))) for a in algs]
+    possbl = [(a, set.intersection(*(set(ingrs) for (ingrs, algs) in foods if a in algs))) for a in algs]
     map_ = dict()
     while possbl:
         possbl = sorted(possbl, key=lambda p: -len(p[1]))
