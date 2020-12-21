@@ -1,45 +1,31 @@
 #!/usr/bin/env python3
 
 import re
-from pprint import pprint
-from itertools import product
 from functools import reduce
-from operator import and_, or_
+from operator import and_
 
 from aoc import read_input
 
-def puzzle1():
-    pass
+def get_map(foods, algs):
+    possbl = [(a, set(reduce(and_, (set(ingrs) for (ingrs, algs) in foods if a in algs)))) for a in algs]
+    map_ = dict()
+    while possbl:
+        possbl = sorted(possbl, key=lambda p: -len(p[1]))
+        a, (i, *_) = possbl.pop()
+        map_[a] = i
+        possbl = [(alg,ing - set([i])) for (alg,ing) in possbl]
+    return map_
 
-def puzzle2():
-    pass
+def puzzle1(foods, map_):
+    return len([i for (ings, _) in foods for i in ings if i not in map_.values()])
+
+def puzzle2(map_):
+    return ','.join(i for (_, i) in sorted(map_.items()))
 
 raw = [row.split(' (contains ') for row in read_input(2020, 21).split('\n')[:-1]]
-data = list(map(lambda row: (re.findall(r'\w+', row[0]), re.findall(r'\w+', row[1])), raw))
-ingredients  = list(set([ingredient for (ingredients, _) in data for ingredient in ingredients]))
-allergens  = list(set([allergen for (_, allergens) in data for allergen in allergens]))
+foods = list(map(lambda row: (re.findall(r'\w+', row[0]), re.findall(r'\w+', row[1])), raw))
+allergens  = list(set([allergen for (_, allergens) in foods for allergen in allergens]))
+map_ = get_map(foods, allergens)
 
-ai_possible = {allergen:[] for allergen in allergens}
-for allergen in allergens:
-    ai_possible[allergen] = set(reduce(and_, [set(ingredients) for (ingredients, allergens) in data if allergen in allergens]))
-
-reduced = True
-contains = {}
-contained = set()
-while reduced:
-    reduced = False
-    for ingr in ai_possible:
-        if len(ai_possible[ingr]) == 1:
-            reduced = True
-            allg, *_ = ai_possible[ingr]
-            contains[ingr] = allg
-            contained.add(allg)
-            for ingr in ai_possible:
-                ai_possible[ingr] -= contained
-
-no_allgs = [ingr for ingr in ingredients if ingr not in contained]
-occurs_no_alg = [ingr for (ingredients, _) in data for ingr in ingredients if ingr in no_allgs]
-
-dangerous = ','.join([ingr for (ingr, _) in sorted(list(zip(contains.values(), contains.keys())), key=lambda r: r[1])])
-print(f"Puzzle 1: {len(occurs_no_alg)}")
-print(f"Puzzle 2: {dangerous}")
+print(f"Puzzle 1: {puzzle1(foods, map_)}")
+print(f"Puzzle 2: {puzzle2(map_)}")
