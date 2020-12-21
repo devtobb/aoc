@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-import re
 from functools import reduce
 from operator import and_
+import re
 
 from aoc import read_input
 
