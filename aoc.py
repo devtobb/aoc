@@ -60,7 +60,6 @@ if __name__ == "__main__":
     path = os.path.dirname(__file__)
     template = os.path.join(path, 'template.py')
     now = datetime.datetime.now()
-    filename = os.path.join(path, "{year}-{day:02d}.py".format(year=now.year, day=now.day))
 
     parser = argparse.ArgumentParser(description="Creates a python file for an advent of code day from a template.")
         
@@ -73,8 +72,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-f", 
         "--file",
-        help="Location of the file to create. Defaults to year-day.py ({})".format(filename), 
-        default=filename)
+        help="Location of the file to create. Defaults to year-day.py")
 
     parser.add_argument(
         "-y", 
@@ -91,5 +89,9 @@ if __name__ == "__main__":
         default=now.day)
 
     args = parser.parse_args()
+
+    if not args.file:
+        args.file =  os.path.join(path, "{year}-{day:02d}.py".format(year=args.year, day=args.day))
+
 
     file_from_template(args)
