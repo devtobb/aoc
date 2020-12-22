@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 
-from functools import reduce
-from operator import and_
 import re
 
 from aoc import read_input
 
 def get_map(foods, algs):
-    possbl = [(a, set(reduce(and_, (set(ingrs) for (ingrs, algs) in foods if a in algs)))) for a in algs]
+    possbl = [(a, set.intersection(*(set(ingrs) for (ingrs, algs) in foods if a in algs))) for a in algs]
     map_ = dict()
     while possbl:
         possbl = sorted(possbl, key=lambda p: -len(p[1]))
@@ -22,8 +20,9 @@ def puzzle1(foods, map_):
 def puzzle2(map_):
     return ','.join(i for (_, i) in sorted(map_.items()))
 
-raw = [row.split(' (contains ') for row in read_input(2020, 21).split('\n')[:-1]]
-foods = list(map(lambda row: (re.findall(r'\w+', row[0]), re.findall(r'\w+', row[1])), raw))
+raw = read_input(2020, 21)
+foods = re.findall(r'([^\(]*) \(contains ([^\)]*)\)\n', raw)
+foods = [(ingrs.split(), algs.split(', ')) for (ingrs, algs) in foods]
 allergens  = list(set([allergen for (_, allergens) in foods for allergen in allergens]))
 map_ = get_map(foods, allergens)
 
