@@ -25,35 +25,40 @@ def move(cups, current):
     
     dest = current - 1
     while not dest in rest:
-        dest = (dest - 1) % len(cups)
-
+        dest -= 1
+        if dest < min(rest):
+            dest = max(rest)
 
     idx_dest, *_ = [n for n, cup in enumerate(rest) if cup==dest]
 
     idx_dest = (idx_dest + 1) % len(cups)
 
-    print(f"cups: {cups} current: {current}")
-    print(f"pu: {pu} [{idx_pu_start}, {idx_pu_end}]")
-    print(f"dest: {dest} ({idx_dest})")
+    # print(f"cups: {cups} current: {current}")
+    # print(f"pu: {pu} [{idx_pu_start}, {idx_pu_end}]")
+    # print(f"dest: {dest} ({idx_dest})")
 
     ret = rest[:idx_dest] + pu + rest[idx_dest:]
-
-    idx_cur_new, *_ = [n for n, cup in enumerate(rest) if cup==current]
-    next_cur = ret[(idx_cur_new+1)%len(cups)]
-    return ret, next_cur
+    # print(f"ret: {ret}")
+    # print()
+    idx_cur_new, *_ = [n for n, cup in enumerate(ret) if cup==current]
+    cur_new = ret[(idx_cur_new + 1)%len(cups)]
+    
+    return ret, cur_new
 
 def puzzle1(cups):
     current, *_ = cups
-    for _ in range(10):
+    for _ in range(100):
         cups, current = move(cups, current)
 
-    return cups
+    idx_one, *_ = [n for n, cup in enumerate(cups) if cup==1]
+    
+    return "".join(blist((cups[idx_one+1:] + cups[:idx_one])) >> str)
 
 def puzzle2():
     pass
 
 raw = read_input(2020, 23)
-raw = '389125467\n'
+# raw = '389125467\n'
 cups = blist(raw[:-1]) >> int
 
 
