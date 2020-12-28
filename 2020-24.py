@@ -31,10 +31,9 @@ def puzzle1(tiles):
     return sum(tiles.values())
 
 def puzzle2(tiles):
-
-    for n in range(100):
+    for _ in range(100):
         tiles_new = defaultdict(lambda: False)
-        for tile in list(tiles.keys()):
+        for tile in list(tiles):
             for neigh in neighbors:
                 if tile + neigh not in tiles_new:
                     neigh_black = sum(tiles[tile + neigh + d] for d in neighbors)
@@ -42,7 +41,7 @@ def puzzle2(tiles):
                                                 not tiles[tile + neigh] and neigh_black == 2)
 
         tiles = trim_tiles(tiles_new)
-        # print(f"Day {n+1}: {sum(tiles.values())}")
+
     return sum(tiles.values())
 
 raw = read_input(2020, 24).split()
