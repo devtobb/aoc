@@ -2,50 +2,53 @@
 
 from aoc import read_input
 
-def move(cups, current):
-    idx_cur = cups.index(current)
-    idx_pu_start = (idx_cur + 1) % len(cups)
-    
-    if len(cups) - idx_pu_start < 3:
-        idx_pu_end = (idx_pu_start + 3) % len(cups)
-        pu = cups[idx_pu_start:] + cups[:idx_pu_end]
-        rest = cups[idx_pu_end:idx_pu_start]
-    else:
-        idx_pu_end = idx_pu_start + 3
-        pu = cups[idx_pu_start:idx_pu_end]
-        rest = cups[:idx_pu_start] + cups[idx_pu_end:]
+def neighbors(cups):
+    neigh = dict(zip(cups[:-1], cups[1:]))
+    neigh[cups[-1]] = cups[0]
+    return neigh
 
+def move(neigh, current, min_, max_):
+    pickup = [neigh[current], neigh[neigh[current]], neigh[neigh[neigh[current]]]]
+    pickup_first, _, pickup_last= pickup
     
-    dest = current - 1
-    while not dest in rest:
-        dest -= 1
-        if dest < min(rest):
-            dest = max(rest)
+    destination = current - 1
+    if destination < min_:
+        destination = max_
+    while destination in pickup:
+        destination -= 1
+        if destination < min_:
+            destination = max_
 
-    idx_dest = rest.index(dest)
-    idx_dest = (idx_dest + 1) % len(cups)
-    cups = rest[:idx_dest] + pu + rest[idx_dest:]
-    idx_cur_new = cups.index(current)
-    cur_new = cups[(idx_cur_new + 1)%len(cups)]
-    
-    return cups, cur_new
+    neigh[destination], neigh[pickup_last], neigh[current] = (
+        pickup_first, neigh[destination], neigh[pickup_last])
+
+    return neigh, neigh[current]
+
+def run(cups, n_rounds):
+    neigh = neighbors(cups)
+    current, *_ = cups
+    min_, max_ = min(cups), max(cups)
+    for _ in range(n_rounds):
+        neigh, current = move(neigh, current, min_, max_)
+
+    return neigh
 
 def puzzle1(cups):
-    current, *_ = cups
-    for _ in range(100):
-        cups, current = move(cups, current)
+    neigh = run(cups, 100)
+    current, ret = 1, ''
+    for _ in range(8):
+        ret += str(current:=neigh[current])
 
-    idx_one = cups.index(1)
+    return ret
+
+def puzzle2(cups):
+    cups = cups + list(range(10, 1_000_001))
+    neigh = run(cups, 10_000_000)
     
-    return "".join(map(str, cups[idx_one+1:] + cups[:idx_one]))
-
-def puzzle2():
-    pass
+    return neigh[1] * neigh[neigh[1]]
 
 raw = read_input(2020, 23)
-# raw = '389125467\n'
 cups = list(map(int, list(raw[:-1])))
 
-
 print(f"Puzzle 1: {puzzle1(cups)}")
-print(f"Puzzle 2: {puzzle2()}")
+print(f"Puzzle 2: {puzzle2(cups)}")
