@@ -6,6 +6,10 @@ import os
 CACHE_FOLDER = "input_cache"
 CACHE_FILENAME = "input-{year}-{day:02d}.txt"
 
+class blist(list):
+    def __rshift__(self, other):
+        return blist(map(other, self))
+
 def read_input(year, day):
     # create cache pah if it doesn't exist
     path = os.path.dirname(__file__)
