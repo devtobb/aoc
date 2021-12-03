@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 from copy import deepcopy
 from math import prod
 from operator import ge, lt
@@ -12,8 +13,10 @@ def bin_to_int(l):
     return int("".join(map(str, map(int, l))), 2)
 
 def puzzle1(raw):
-    gamma = [colsum(raw, col)>len(raw)/2 for col in range(12)]
-    epsilon = [colsum(raw, col)<len(raw)/2 for col in range(12)]
+    first, *_ = raw
+    n_bits = len(first)
+    gamma = [colsum(raw, col)>len(raw)/2 for col in range(n_bits)]
+    epsilon = [colsum(raw, col)<len(raw)/2 for col in range(n_bits)]
     
     return bin_to_int(gamma) * bin_to_int(epsilon)
 
