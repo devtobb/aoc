@@ -39,7 +39,7 @@ def puzzle2(nums, boards):
     return score(winner, boards, drawn, num)
 
 raw = read_input(2021, 4)[:-1]
-nums, *boards = raw[:-1].split("\n\n")
+nums, *boards = raw.split("\n\n")
 nums = list(map(int, nums.split(",")))
 boards = np.array([[list(map(int, l.split())) for l in b.split('\n')] for b in boards])
 
