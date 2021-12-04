@@ -4,39 +4,39 @@ import numpy as np
 
 from aoc import read_input
 
-def is_bingo(drawn):
-    return np.any([np.any(np.all(drawn, axis=ax)) for ax in (1, 2)])
-
 def winning_boards(drawn):
-    b1, _ = np.where(np.all(drawn, axis=1))
-    b2, _ = np.where(np.all(drawn, axis=2))
-    boards = np.concatenate((b1, b2))
+    bvert, _ = np.where(np.all(drawn, axis=1))
+    bhor, _ = np.where(np.all(drawn, axis=2))
+
+    boards = np.concatenate((bvert, bhor))
     return np.unique(boards)
 
-def puzzle1(nums, boards):
+def play_until(nums, boards, until):
     drawn = np.zeros(boards.shape)
-    while not is_bingo(drawn):
+    winners = {}
+    while until(winners, boards):
         num = nums.pop(0)
         drawn[np.where(boards==num)] = True
+        winners_cur = winning_boards(drawn)
+        for winner in winners_cur:
+            winners[winner] = None
 
-    winner, *_ = winning_boards(drawn)
+    return list(winners.keys()), drawn, num
+
+def score(winner, boards, drawn, num):
     return np.sum(boards[winner, np.logical_not(drawn[winner])]) * num
 
+def puzzle1(nums, boards):
+    winners, drawn, num = play_until(nums, boards, lambda w, b: len(w)==0)
+    winner, *_ = winners
+
+    return score(winner, boards, drawn, num)
 
 def puzzle2(nums, boards):
-    drawn = np.zeros(boards.shape)
-    remaining = list(range(len(boards)))
-    winners = []
-    while len(winners) < len(boards):
-        num = nums.pop(0)
-        drawn[np.where(boards==num)] = True
-        winners = winning_boards(drawn)
-        if len(winners) < len(boards):
-            remaining = [n for n in range(len(boards)) if n not in winners]
+    winners, drawn, num = play_until(nums, boards, lambda w, b: len(w)<len(b))
+    *_, winner  = winners
 
-    last, *_ = remaining
-
-    return np.sum(boards[last, np.logical_not(drawn[last])]) * num
+    return score(winner, boards, drawn, num)
 
 raw = read_input(2021, 4)[:-1]
 nums, *boards = raw[:-1].split("\n\n")
