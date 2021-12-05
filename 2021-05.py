@@ -17,7 +17,7 @@ def dangerous(lines):
         for x, y in zip(lrng(x1, x2), lrng(y1, y2)):
             field[(x,y)] = (field.get((x, y)) or 0) + 1 
 
-    return sum(( 1 for key in field.keys() if field[key] > 1))
+    return sum(( 1 for v in field.values() if v > 1))
 
 def is_not_diag(line):
     (x1, y1), (x2, y2) = line
