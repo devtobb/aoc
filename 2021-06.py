@@ -4,9 +4,10 @@ from aoc import read_input
 
 def run_days(fish, days):
     n_fish = [fish.count(d) for d in range(9)]
+    zero = 0
     for d in range(days):
-        n_fish = [n_fish[(n+1)%9] for n in range(9)]
-        n_fish[6] += n_fish[8]
+        zero = (zero + 1) % 9
+        n_fish[(zero + 6) % 9] += n_fish[(zero + 8) % 9]
 
     return sum(n_fish)
 
