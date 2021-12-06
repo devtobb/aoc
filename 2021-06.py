@@ -3,12 +3,12 @@
 from aoc import read_input
 
 def run_days(fish, days):
-    n_fish = {d:fish.count(d) for d in range(9)}
+    n_fish = [fish.count(d) for d in range(9)]
     for d in range(days):
-        n_fish = {n:n_fish[(n+1)%9] for n in range(9)}
+        n_fish = [n_fish[(n+1)%9] for n in range(9)]
         n_fish[6] += n_fish[8]
 
-    return sum((n for n in n_fish.values()))
+    return sum(n_fish)
 
 def puzzle1(fish):
     return run_days(fish, 80)
