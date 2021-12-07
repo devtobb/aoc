@@ -6,7 +6,7 @@ from aoc import read_input
 
 def solve(crabs, cost, center):
     m = center(crabs)
-    opt =  [floor(m), ceil(m)]
+    opt =  {floor(m), ceil(m)}
     return int(min((sum((cost(c, o) for c in crabs)) for o in opt)))
 
 def puzzle1(crabs):
