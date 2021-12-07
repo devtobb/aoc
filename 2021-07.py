@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from statistics import median, mean
-
 from math import floor, ceil
+
 from aoc import read_input
 
 def solve(crabs, cost, center):
@@ -14,7 +14,7 @@ def puzzle1(crabs):
     return solve(crabs, cost, median)
 
 def puzzle2(crabs):
-    cost = lambda crab, pos: 0.5*abs(crab-pos)*(abs(crab-pos)+1)
+    cost = lambda crab, pos: abs(crab-pos)*(abs(crab-pos)+1)//2
     return solve(crabs, cost, mean)
 
 raw = read_input(2021, 7)
