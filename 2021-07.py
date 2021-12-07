@@ -4,8 +4,8 @@ from statistics import median
 from aoc import read_input
 
 def puzzle1(crabs):
-    m = median(crabs)
-    return int(sum((abs(m-c) for c in crabs)))
+    opt = median(crabs)
+    return int(sum((abs(opt-c) for c in crabs)))
 
 def puzzle2(crabs):
     opt = sum(crabs)//len(crabs)
