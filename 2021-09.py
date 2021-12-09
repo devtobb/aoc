@@ -19,7 +19,7 @@ def puzzle1(a):
 def puzzle2(a):
     c, n = label(a<9, structure=[[0,1,0],[1,0,1],[0,1,0]])
     s = sorted([np.sum(c==l) for l in range(1, n+1)])
-    return prod((s[-1], s[-2], s[-3]))
+    return prod(s[-3:])
 
 a = np.array(list(map(list, read_input(2021, 9).split())), dtype=int)
 
