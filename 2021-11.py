@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-import numpy as np
-
 from itertools import product
+
+import numpy as np
 
 from aoc import read_input
 
@@ -22,7 +22,7 @@ def solve(octo):
         
         candidates = [True],
         while len(candidates[0])>0:
-            candidates = np.where(np.logical_and(octo[core]>9, can_flash))
+            candidates = np.where(np.logical_and(can_flash, octo[core]>9))
             can_flash[candidates] = False
             if n<=100: flashes += len(candidates[0])
             for y, x in zip(*candidates):
@@ -31,9 +31,6 @@ def solve(octo):
         octo[core][np.logical_not(can_flash)] = 0
 
     return flashes, n
-
-def puzzle2():
-    pass
 
 raw = read_input(2021, 11)
 octo = np.array(list(map(list, raw.split())), dtype=np.ubyte) 
