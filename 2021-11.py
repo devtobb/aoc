@@ -20,17 +20,15 @@ def solve(octo):
         n += 1
         can_flash = np.ones(octo[core].shape)
         
-        flashed = True
-        while flashed:
-            flashed = False
-            for y, x in zip(*np.where(octo[core]>9)):
-                if can_flash[y, x]:
-                    can_flash[y, x] = False
-                    flashed = True
-                    if n<=100: flashes += 1
-                    octo[y:y+3,x:x+3] += neigh
+        candidates = [True],
+        while len(candidates[0])>0:
+            candidates = np.where(np.logical_and(octo[core]>9, can_flash))
+            can_flash[candidates] = False
+            if n<=100: flashes += len(candidates[0])
+            for y, x in zip(*candidates):
+                octo[y:y+3,x:x+3] += neigh
         
-        octo[core][np.logical_not(can_flash)]=0
+        octo[core][np.logical_not(can_flash)] = 0
 
     return flashes, n
 
