@@ -8,37 +8,37 @@ from aoc import read_input
 
 
 def solve(octo):
-    wy, wx = octo.shape
+    octo = np.pad(octo, 1, mode='constant', constant_values=0)
+    core = np.s_[1:-1, 1:-1]
+    neigh = np.array([[1,1,1],[1,0,1],[1,1,1]], dtype=np.ubyte)
     flashes = 0
-    can_flash = np.ones(octo.shape)
-    n_flashes_100 = 0 
     n = 0
+    
+    can_flash = np.ones(octo[core].shape)
     while np.any(can_flash):
         octo += 1
         n += 1
-        can_flash = np.ones(octo.shape)
+        can_flash = np.ones(octo[core].shape)
+        
         flashed = True
         while flashed:
             flashed = False
-            for y, x in zip(*np.where(octo>9)):
+            for y, x in zip(*np.where(octo[core]>9)):
                 if can_flash[y, x]:
                     can_flash[y, x] = False
                     flashed = True
-                    flashes += 1
-                    for cy, cx in product(range(y-1, y+2), range(x-1, x+2)):
-                        if cy>=0 and cy<wy and cx>=0 and cx<wx and (cy!=y or cx!=x):
-                            octo[cy, cx] += 1
-        octo[np.logical_not(can_flash)]=0
-        if n==100:
-            n_flashes_100 = flashes
+                    if n<=100: flashes += 1
+                    octo[y:y+3,x:x+3] += neigh
+        
+        octo[core][np.logical_not(can_flash)]=0
 
-    return n_flashes_100, n
+    return flashes, n
 
 def puzzle2():
     pass
 
 raw = read_input(2021, 11)
-octo = np.array(list(map(list, raw.split())), dtype=int) 
+octo = np.array(list(map(list, raw.split())), dtype=np.ubyte) 
 p1, p2 = solve(octo)
 
 print(f"Puzzle 1: {p1}")
