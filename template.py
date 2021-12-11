@@ -10,5 +10,5 @@ def puzzle2():
 
 raw = read_input({year}, {day})
 
-print(f"Puzzle 1: {{puzzle1()}}")
-print(f"Puzzle 2: {{puzzle2()}}")
+print(f"\033[97m★\033[00m {{puzzle1()}}")
+print(f"\033[93m★\033[00m {{puzzle2()}}")
