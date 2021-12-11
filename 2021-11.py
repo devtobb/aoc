@@ -39,5 +39,5 @@ raw = read_input(2021, 11)
 octo = np.array(list(map(list, raw.split())), dtype=np.ubyte) 
 p1, p2 = solve(octo)
 
-print(f"Puzzle 1: {p1}")
-print(f"Puzzle 2: {p2}")
+print(f"\033[97m★\033[00m {p1}")
+print(f"\033[93m★\033[00m {p2}")
