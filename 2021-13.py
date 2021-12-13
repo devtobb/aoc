@@ -6,24 +6,18 @@ import matplotlib.pyplot as plt
 
 from aoc import read_input
 
+def fold_coord(coord, pos):
+    return 2*pos-coord if coord>pos else coord
+
 def do_folds(dots, folds):
     dots = set(dots)
     for ori, pos in folds:
-        fold = set()
-        for dx, dy in dots:
-            if ori == "x":
-                if dx > pos:
-                    fold |= {(2*pos-dx, dy)}
-                else:
-                    fold |= {(dx, dy)}
-            else:
-                if dy > pos:
-                    fold |= {(dx, 2*pos-dy)}
-                else:
-                    fold |= {(dx, dy)}
-        dots = fold
+        f = dict(
+            x=lambda p: (fold_coord(p[0], pos), p[1]),
+            y=lambda p: (p[0], fold_coord(p[1], pos))
+        )
+        dots = set(map(f[ori], dots))
     return dots
-        
 
 def puzzle1(dots, folds):
     return len(do_folds(dots, folds[:1]))
