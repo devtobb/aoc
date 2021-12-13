@@ -27,7 +27,7 @@ def puzzle2(dots, folds):
 
 raw = read_input(2021, 13)
 dots = {tuple(map(int, c)) for c in re.findall("(\d+),(\d+)", raw)}
-folds = list(map(lambda l: (l[0], int(l[1])), re.findall("(.)=(\d+)", raw)))
+folds = [(o, int(p)) for o, p in re.findall("(.)=(\d+)", raw)]
 
 print(f"\033[97m★\033[00m {puzzle1(dots, folds)}")
 print(f"\033[93m★\033[00m {puzzle2(dots, folds)}")
