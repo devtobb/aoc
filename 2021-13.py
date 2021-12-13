@@ -30,8 +30,8 @@ def puzzle2(dots, folds):
 
 raw = read_input(2021, 13)
 dots, folds = raw.split("\n\n")
-dots = {(int(x), int(y)) for x, y in (l.split(",") for l in dots.split())}
-folds = list(map(lambda l: (l[0], int(l[1])), re.findall("fold along (.)=(\d+)\n", folds)))
+dots = {tuple(map(int, c)) for c in (l.split(",") for l in dots.split())}
+folds = list(map(lambda l: (l[0], int(l[1])), re.findall("(.)=(\d+)", folds)))
 
 print(f"\033[97m★\033[00m {puzzle1(dots, folds)}")
 print(f"\033[93m★\033[00m {puzzle2(dots, folds)}")
