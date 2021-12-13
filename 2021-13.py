@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from aoc import read_input
 
 def fold_coord(coord, pos):
-    return 2*pos-coord if coord>pos else coord
+    return min(2*pos-coord, coord)
 
 def do_folds(dots, folds):
     dots = set(dots)
