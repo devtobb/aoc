@@ -6,14 +6,11 @@ import matplotlib.pyplot as plt
 
 from aoc import read_input
 
-def fold_coord(coord, pos):
-    return min(2*pos-coord, coord)
-
 def do_folds(dots, folds):
     for ori, pos in folds:
         f = dict(
-            x=lambda p: (fold_coord(p[0], pos), p[1]),
-            y=lambda p: (p[0], fold_coord(p[1], pos))
+            x=lambda p: (min(2*pos-p[0], p[0]), p[1]),
+            y=lambda p: (p[0], min(2*pos-p[1], p[1]))
         )
         dots = set(map(f[ori], dots))
     return dots
