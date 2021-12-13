@@ -21,7 +21,7 @@ def puzzle1(dots, folds):
 def puzzle2(dots, folds):
     dots = do_folds(dots, folds)
     plt.scatter([x for x, _ in dots], [-y for _, y in dots])
-    plt.gca().set_aspect('equal')    
+    plt.gca().set_aspect(1)    
     plt.show()
     return "See plot ..."
 
