@@ -10,7 +10,6 @@ def fold_coord(coord, pos):
     return min(2*pos-coord, coord)
 
 def do_folds(dots, folds):
-    dots = set(dots)
     for ori, pos in folds:
         f = dict(
             x=lambda p: (fold_coord(p[0], pos), p[1]),
@@ -31,7 +30,7 @@ def puzzle2(dots, folds):
 
 raw = read_input(2021, 13)
 dots, folds = raw.split("\n\n")
-dots = [(int(x), int(y)) for x, y in (l.split(",") for l in dots.split())]
+dots = {(int(x), int(y)) for x, y in (l.split(",") for l in dots.split())}
 folds = list(map(lambda l: (l[0], int(l[1])), re.findall("fold along (.)=(\d+)\n", folds)))
 
 print(f"\033[97m★\033[00m {puzzle1(dots, folds)}")
