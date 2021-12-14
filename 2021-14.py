@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 from collections import defaultdict
+from math import ceil
 import re
 
 from aoc import read_input
 
 def synthesize(start, subs, rounds):
-    start = "#" + start + "#"
     counts = defaultdict(int)
     for e1, e2 in zip(start, start[1:]):
         counts[e1 + e2] += 1
@@ -23,7 +23,7 @@ def synthesize(start, subs, rounds):
         count[e1] += counts[e1 + e2]
         count[e2] += counts[e1 + e2]
     
-    least, *_, most = sorted([count[e]//2 for e in count if e.isalpha()])
+    least, *_, most = sorted([ceil(c/2) for c in count.values()])
     return most - least
 
 raw = read_input(2021, 14)
