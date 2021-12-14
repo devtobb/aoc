@@ -27,15 +27,9 @@ def synthesize(start, subs, rounds):
     least, *_, most = sorted([count[e]//2 for e in count if e.isalpha()])
     return most - least
 
-def puzzle1(start, subs):
-    return synthesize(start, subs, 10)
-
-def puzzle2(start, subs):
-    return synthesize(start, subs, 40)
-
 raw = read_input(2021, 14)
 start, subs = raw.split('\n\n')
 subs = dict(re.findall("(\w+) -> (\w)+\n", subs))
 
-print(f"\033[97m★\033[00m {puzzle1(start, subs)}")
-print(f"\033[93m★\033[00m {puzzle2(start, subs)}")
+print(f"\033[97m★\033[00m {synthesize(start, subs, 10)}")
+print(f"\033[93m★\033[00m {synthesize(start, subs, 40)}")
