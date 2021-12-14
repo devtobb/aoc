@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from copy import copy
 from collections import defaultdict
 import re
 
@@ -13,12 +12,11 @@ def synthesize(start, subs, rounds):
         counts[e1+e2] += 1
     
     for _ in range(rounds):
-        counts_new = copy(counts)
+        counts_new = defaultdict(int)
         for e1, e2 in subs:
             e3 = subs[e1 + e2]
             counts_new[e1 + e3] += counts[e1 + e2]
             counts_new[e3 + e2] += counts[e1 + e2]
-            counts_new[e1 + e2] -= counts[e1 + e2]
         counts = counts_new
     
     count = defaultdict(int)
