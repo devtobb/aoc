@@ -7,7 +7,6 @@ import re
 from gmpy2 import mpz
 import numpy as np
 
-
 from aoc import read_input
 
 def fast_exp(m, p):
@@ -40,10 +39,14 @@ def synthesize(start, subs, elements, rounds):
     for e1, e2 in pairs:
         count[e1] += result[pairs.index(e1+e2)]
         count[e2] += result[pairs.index(e1+e2)]
+    
+    first, *_, last = start
+    count[first] += 1
+    count[last] += 1
 
-    least, *_, most = sorted(map(lambda c: ceil(c/2), count.values()))
+    least, *_, most = sorted(map(lambda c: c//2, count.values()))
 
-    return int(most - least)
+    return most - least
 
 raw = read_input(2021, 14)
 start, subs = raw.split('\n\n')
