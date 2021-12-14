@@ -8,7 +8,7 @@ from aoc import read_input
 def synthesize(start, subs, rounds):
     start = "#" + start + "#"
     counts = defaultdict(int)
-    for e1, e2 in zip(start[:-1], start[1:]):
+    for e1, e2 in zip(start, start[1:]):
         counts[e1+e2] += 1
     
     for _ in range(rounds):
@@ -24,9 +24,7 @@ def synthesize(start, subs, rounds):
         count[e1] += counts[e1 + e2]
         count[e2] += counts[e1 + e2]
     
-    count = sorted([count[e]//2 for e in count if e.isalpha()])
-    least, *_ = count
-    *_, most = count
+    least, *_, most = sorted([count[e]//2 for e in count if e.isalpha()])
     return most - least
 
 def puzzle1(start, subs):
