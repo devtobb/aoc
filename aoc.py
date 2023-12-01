@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-import pathlib
 import os
+import pathlib
+import stat
 
 CACHE_FOLDER = "input_cache"
 CACHE_FILENAME = "input-{year}-{day:02d}.txt"
@@ -53,6 +54,11 @@ def file_from_template(args):
 
         with open(args.file, 'wt') as f:
             f.write(content)
+        
+        # make executable by world
+        st = os.stat(args.file)
+        os.chmod(args.file, st.st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH )
+
     else:
         print("File {} already exists. Doing nothing.".format(args.file))
     
