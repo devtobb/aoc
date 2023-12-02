@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from collections import namedtuple
 from functools import reduce
 from math import prod
 import re
@@ -7,31 +8,35 @@ import re
 from aoc import read_input
 
 colors = 'rgb'
+Turn = namedtuple('Turn', 'n color')
+Game = namedtuple('Game', 'id turns')
 
 def turn(token):
     n, color = token.split()
-    return int(n), color
+    return Turn(int(n), color)
 
 def game(line):
-    return tuple(map(turn, re.findall(r'\d+ \w', line)))
+    gid, = re.match('Game (\d+):', line).groups()
+    return Game(int(gid), tuple(map(turn, re.findall(r'\d+ \w', line))))
 
 def is_valid_turn(turn):
-    n, color = turn
-    return n < colors.index(color) + 13
+    return turn.n < colors.index(turn.color) + 13
 
 def is_valid_game(game):
-    _, game = game
-    return all(map(is_valid_turn, game))
-
-def score(game):
-    score, _ = game
-    return score
+    return all(map(is_valid_turn, game.turns))
 
 def power(game):
-    return prod(max(map(score, filter(lambda t: t[1]==c, game))) for c in colors)
+    return prod(
+        max(
+            map(
+                lambda turn: turn.n, 
+                filter(
+                    lambda turn: turn.color==color,
+                    game.turns))) 
+        for color in colors)
 
 def puzzle1(games):
-    return sum(map(score, filter(is_valid_game, enumerate(games, 1))))
+    return sum(map(lambda game: game.id, filter(is_valid_game, games)))
 
 def puzzle2(games):
     return sum(map(power, games))
