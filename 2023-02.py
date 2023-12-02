@@ -2,34 +2,42 @@
 
 from functools import reduce
 from math import prod
+import re
 
 from aoc import read_input
 
-colors = ('red', 'green', 'blue')
+colors = 'rgb'
+
+def turn(token):
+    n, color = token.split()
+    return int(n), color
 
 def game(line):
-    game, turns = line.split(":")
-    _, gid = game.split()
-    turns = [{color.split()[1]:int(color.split()[0]) for color in turn.split(',')} for turn in turns.split(';')]
-    return dict(gid=int(gid), turns=turns)
+    return tuple(map(turn, re.findall(r'\d+ \w', line)))
 
 def is_valid_turn(turn):
-    return all(turn.get(color, 0)<n for n, color in enumerate(colors, 13))
+    n, color = turn
+    return n < colors.index(color) + 13
 
 def is_valid_game(game):
-    return all(map(is_valid_turn, game['turns']))
+    _, game = game
+    return all(map(is_valid_turn, game))
+
+def score(game):
+    score, _ = game
+    return score
 
 def power(game):
-    return prod(reduce(max, (turn.get(color, 0) for turn in game['turns'])) for color in colors)
+    return prod(max(map(score, filter(lambda t: t[1]==c, game))) for c in colors)
 
 def puzzle1(games):
-    return sum(map(lambda g: g['gid'], filter(is_valid_game, games)))
+    return sum(map(score, filter(is_valid_game, enumerate(games, 1))))
 
 def puzzle2(games):
     return sum(map(power, games))
 
 lines = read_input(2023, 2).splitlines()
-games = list(map(game, lines))
+games = tuple(map(game, lines))
 
 print(f"\033[97m★\033[00m {puzzle1(games)}")
 print(f"\033[93m★\033[00m {puzzle2(games)}")
