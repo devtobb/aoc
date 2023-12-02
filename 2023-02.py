@@ -26,17 +26,10 @@ def is_valid_game(game):
     return all(map(is_valid_turn, game.turns))
 
 def power(game):
-    return prod(
-        max(
-            map(
-                lambda turn: turn.n, 
-                filter(
-                    lambda turn: turn.color==color,
-                    game.turns))) 
-        for color in colors)
+    return prod(max(turn.n for turn in game.turns if turn.color==color) for color in colors)
 
 def puzzle1(games):
-    return sum(map(lambda game: game.id, filter(is_valid_game, games)))
+    return sum(game.id for game in filter(is_valid_game, games))
 
 def puzzle2(games):
     return sum(map(power, games))
