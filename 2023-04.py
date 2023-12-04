@@ -16,7 +16,7 @@ class Card:
     
     @cached_property
     def n_matching(self):
-        return sum(1 for n in self.have if n in self.win)
+        return sum(n in self.win for n in self.have)
 
     @property
     def points(self):
