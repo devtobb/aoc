@@ -10,8 +10,8 @@ class Card:
         _, numbers = line.split(':')
         win, have = numbers.split('|')
         
-        self.win = list(map(int, win.split()))
-        self.have = list(map(int, have.split()))
+        self.win = tuple(map(int, win.split()))
+        self.have = tuple(map(int, have.split()))
         self.count = 1
     
     @cached_property
