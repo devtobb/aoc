@@ -26,8 +26,8 @@ def puzzle1(cards):
     return sum(card.points for card in cards)
         
 def puzzle2(cards):
-    for n, card in enumerate(cards):
-        for dupe in cards[n+1:n+1+card.n_matching]:
+    for n, card in enumerate(cards, 1):
+        for dupe in cards[n:n+card.n_matching]:
             dupe.count += card.count
 
     return sum(card.count for card in cards)
