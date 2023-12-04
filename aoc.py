@@ -11,7 +11,7 @@ class blist(list):
     def __rshift__(self, other):
         return blist(map(other, self))
 
-def read_input(year, day):
+def read_input(year: int, day: int) -> str:
     # create cache pah if it doesn't exist
     path = os.path.dirname(__file__)
     path = os.path.join(path, CACHE_FOLDER)
@@ -32,7 +32,7 @@ def read_input(year, day):
     return content
 
 
-def read_remote(year, day):
+def read_remote(year: int, day: int) -> str:
     import requests
     import yaml
     
