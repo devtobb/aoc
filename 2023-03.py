@@ -4,49 +4,51 @@ import re
 
 from aoc import read_input
 
-
-lines = read_input(2023, 3).splitlines()
-h = len(lines)
-w = len(lines[0])
-
-lines = ['.'+line+'.' for line in lines]
-lines = ['.'*(w+2)] + lines +['.'*(w+2)]
-
-h+=2
-w+=2
-
 def is_any_sym(t):
     return any((c not in '.1234567890' for c in t))
 
-s1 = 0
-for y in range(len(lines)):
-    for m in re.finditer('\d+', lines[y]):
-        start, end = m.span()
-        if (
-            is_any_sym(lines[y-1][start-1:end+1]) or
-            is_any_sym(lines[y+1][start-1:end+1]) or
-            is_any_sym(lines[y][start-1]) or
-            is_any_sym(lines[y][end]) 
-        ):
-            s1 += int(m.group())
+def puzzle1(lines):
+    _sum = 0
+    for n, line in enumerate(lines):
+        for m in re.finditer('\d+', line):
+            start, end = m.span()
+            if (
+                is_any_sym(lines[n-1][start-1:end+1]) or
+                is_any_sym(lines[n+1][start-1:end+1]) or
+                is_any_sym(lines[n][start-1]) or
+                is_any_sym(lines[n][end]) 
+            ):
+                _sum += int(m.group())
+    return _sum
+
+def puzzle2(lines):
+    height = len(lines)
+    width = len(lines[0])
+    
+    gears = [[[] for _ in range(width)] for _ in range(height)]
+
+    for n, line in enumerate(lines):
+        for m in re.finditer(r'\d+', line):
+            start, end = m.span()
+            num = int(m.group())
+            for delta in [-1, 0, 1]:
+                for mg in re.finditer(r'\*', lines[n+delta][start-1:end+1]):
+                    g, _ = mg.span()
+                    gears[n+delta][start-1+g].append(num)
+
+    _sum = 0
+    for line in gears:
+        for gear in line:
+            if len(gear) == 2:
+                _sum += gear[0]*gear[1]
+    
+    return(_sum)
 
 
-gears = [[[] for _ in range(w)] for _ in range(h)]
+lines = read_input(2023, 3).splitlines()
+width = len(lines[0])
+lines = ['.'+line+'.' for line in lines]
+lines = ['.'*(width+2)] + lines +['.'*(width+2)]
 
-for y in range(h):
-    for m in re.finditer(r'\d+', lines[y]):
-        start, end = m.span()
-        num = int(m.group())
-        for dy in [-1, 0, 1]:
-            for mg in re.finditer(r'\*', lines[y+dy][start-1:end+1]):
-                g, _ = mg.span()
-                gears[y+dy][start-1+g].append(num)
-
-s2 = 0
-for line in gears:
-    for gear in line:
-        if len(gear) == 2:
-            s2 += gear[0]*gear[1]
-
-print(f"\033[97m★\033[00m {s1}")
-print(f"\033[93m★\033[00m {s2}")
+print(f"\033[97m★\033[00m {puzzle1(lines)}")
+print(f"\033[93m★\033[00m {puzzle2(lines)}")
