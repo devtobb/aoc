@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from functools import cached_property
-import re
 
 from aoc import read_input
 
