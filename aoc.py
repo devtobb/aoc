@@ -58,7 +58,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if not args.file:
-        args.file =  os.path.join(path, "{year}-{day:02d}.py".format(year=args.year, day=args.day))
+        args.file =  os.path.join(path, str(args.year), "{year}-{day:02d}.py".format(year=args.year, day=args.day))
 
 
     file_from_template(args)
