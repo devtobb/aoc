@@ -7,7 +7,7 @@ from itertools import combinations_with_replacement
 from aoc import read_input
 
 hand_type = ['HIGH_CARD', 'ONE_PAIR', 'TWO_PAIR', 'THREE', 'FULL_HOUSE', 'FOUR', 'FIVE']
-lookup_type = {t:n for n, t in enumerate(((5,1),(4,2),(3,2),(3,3),(2,3),(2,4),(1,5)))}
+lookup_type = {t:n for n, t in enumerate(((1,1),(2,1),(2,2),(3,1),(3,2),(4,1),(5,0)))}
 
 @total_ordering
 class Hand(object):
@@ -25,9 +25,8 @@ class Hand(object):
     @staticmethod
     @cache
     def calculate_typ(cards):
-        n_cards = len(set(cards))
-        (_, card_max), *_ = Counter(cards).most_common()
-        return lookup_type[(n_cards, card_max)]
+        *_, second, first = [0] + sorted(Counter(cards).values())
+        return lookup_type[(first, second)]
 
     def __eq__(self, other):
         return self.cards == other.cards
@@ -53,14 +52,9 @@ class HandJoker(Hand):
     @staticmethod
     @cache
     def calculate_typ(cards):
-        n_joker = cards.count('J')
-        _max = 0
-        for newcards in combinations_with_replacement(HandJoker.CARDS, n_joker):
-            cards_mod = cards
-            for c in newcards:
-                cards_mod = cards_mod.replace('J', c, 1)
-            _max = max(_max, Hand.calculate_typ(cards_mod))
-        return _max
+        *_, second, first = [0, 0] + sorted(Counter(cards.replace('J', '')).values())
+        first += cards.count('J')
+        return lookup_type[(first, second)]
     
 def score(hands):
     return sum(n*hand.bid for n, hand in enumerate(sorted(hands), 1))
