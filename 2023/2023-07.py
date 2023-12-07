@@ -1,49 +1,38 @@
 #!/usr/bin/env python3
 
 from collections import Counter
-from functools import cached_property
 
 from tools import read_input
 
-first_second = ((1,1),(2,1),(2,2),(3,1),(3,2),(4,1),(5,0))
-lookup = {t:n for n, t in enumerate(first_second)}
+FIRST_SECOND = ((1,1),(2,1),(2,2),(3,1),(3,2),(4,1),(5,0))
+LOOKUP = {t:n for n, t in enumerate(FIRST_SECOND)}
+ORDER = {False :  "23456789TJQKA", True :  "J23456789TQKA"}
 
 class Hand(object):
-    CARDS = "23456789TJQKA"
-
     def __init__(self, line):
         self.cards, bid = line.split()
         self.bid = int(bid)
 
-    def _type(self):
-        counter = Counter(self.cards)
+    def _type(self, joker):
+        cards = self.cards.replace('J', '') if joker else self.cards
+        counter = Counter(cards)
         freq = sorted(counter.values(), reverse=True)
-        first, second, *_ = freq + [0]
-        return lookup[(first, second)]
+        first, second, *_ = freq + [0, 0]
+        first += joker * self.cards.count('J')
+        return LOOKUP[(first, second)]
 
-    def order(self):
-        o = self._type()
+    def order(self, joker=False):
+        o = self._type(joker)
         for card in self.cards:
-            o = (o << 4) + self.CARDS.index(card)
+            o = (o << 4) + ORDER[joker].index(card)
         return o
-
-class HandJoker(Hand):
-    CARDS = "J23456789TQKA"
-
-    def _type(self):
-        counter = Counter(self.cards.replace('J', ''))
-        freq = sorted(counter.values(), reverse=True)
-        first, second, *_  =  freq + [0, 0]
-        first += self.cards.count('J')
-        return lookup[(first, second)]
-    
-def score(hands):
-    hands = sorted(hands, key=lambda h: h.order())
+        
+def score(hands, joker):
+    hands = sorted(hands, key=lambda h: h.order(joker))
     return sum(n*hand.bid for n, hand in enumerate(hands, 1))
 
-raw = read_input(2023, 7).splitlines()
+raw = read_input(2023, 7, 'bb').splitlines()
 hands = tuple(map(Hand, raw))
-hands_joker = tuple(map(HandJoker, raw))
 
-print(f"\033[97m★\033[00m {score(hands)}")
-print(f"\033[93m★\033[00m {score(hands_joker)}")
+print(f"\033[97m★\033[00m {score(hands, False)}")
+print(f"\033[93m★\033[00m {score(hands, True)}")
