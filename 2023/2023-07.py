@@ -4,8 +4,6 @@ from collections import Counter
 
 from tools import read_input
 
-FIRST_SECOND = ((1,1),(2,1),(2,2),(3,1),(3,2),(4,1),(5,0))
-LOOKUP = {t:n for n, t in enumerate(FIRST_SECOND)}
 ORDER = {False :  "23456789TJQKA", True :  "J23456789TQKA"}
 
 class Hand(object):
@@ -19,7 +17,7 @@ class Hand(object):
         frequencies = sorted(counter.values(), reverse=True)
         most_frequent, second_most_frequent, *_ = frequencies + [0, 0]
         most_frequent += joker * self.cards.count('J')
-        return LOOKUP[(most_frequent, second_most_frequent)]
+        return (most_frequent << 1) + second_most_frequent
 
     def order(self, joker=False):
         o = self._type(joker)
