@@ -11,9 +11,9 @@ def order(hand, joker=False):
     cards = hand.cards.replace('J', '') if joker else hand.cards
     counter = Counter(cards)
     frequencies = sorted(counter.values(), reverse=True)
-    most_frequent, second_most_frequent, *_ = frequencies + [0, 0]
-    most_frequent += joker * hand.cards.count('J')
-    order = (most_frequent << 1) + second_most_frequent
+    most_freq, seconde_freq, *_ = frequencies + [0, 0]
+    most_freq += joker * hand.cards.count('J')
+    order = (most_freq << 1) + seconde_freq
     for card in hand.cards:
         order = (order << 4) + ORDER[joker].index(card)
     return order
