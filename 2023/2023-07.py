@@ -16,10 +16,10 @@ class Hand(object):
     def _type(self, joker):
         cards = self.cards.replace('J', '') if joker else self.cards
         counter = Counter(cards)
-        freq = sorted(counter.values(), reverse=True)
-        first, second, *_ = freq + [0, 0]
-        first += joker * self.cards.count('J')
-        return LOOKUP[(first, second)]
+        frequencies = sorted(counter.values(), reverse=True)
+        most_frequent, second_most_frequent, *_ = frequencies + [0, 0]
+        most_frequent += joker * self.cards.count('J')
+        return LOOKUP[(most_frequent, second_most_frequent)]
 
     def order(self, joker=False):
         o = self._type(joker)
