@@ -2,20 +2,20 @@ import os
 import pathlib
 
 CACHE_FOLDER = "input_cache"
-CACHE_FILENAME = "input-{year}-{day:02d}.txt"
+CACHE_FILENAME = "input-{year}-{day:02d}{suffix}.txt"
 
 class blist(list):
     def __rshift__(self, other):
         return blist(map(other, self))
 
-def read_input(year: int, day: int) -> str:
+def read_input(year: int, day: int, suffix: str = "") -> str:
     # create cache pah if it doesn't exist
     path = os.path.dirname(__file__)
     path = os.path.join(path, CACHE_FOLDER)
     pathlib.Path(path).mkdir(parents=True, exist_ok=True)  
 
     # check if file exists
-    filename = os.path.join(path, CACHE_FILENAME.format(year=year, day=day))
+    filename = os.path.join(path, CACHE_FILENAME.format(year=year, day=day, suffix=suffix))
     if os.path.isfile(filename):
         # read input from cache file
         with open(filename, 'rt') as f:
