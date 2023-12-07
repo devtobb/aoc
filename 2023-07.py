@@ -2,7 +2,7 @@
 
 from collections import Counter
 from functools import total_ordering, cache
-from itertools import product
+from itertools import combinations_with_replacement
 
 from aoc import read_input
 
@@ -55,7 +55,7 @@ class HandJoker(Hand):
     def calculate_typ(cards):
         n_joker = cards.count('J')
         _max = 0
-        for newcards in product(*(HandJoker.CARDS for _ in range(n_joker))):
+        for newcards in combinations_with_replacement(HandJoker.CARDS, n_joker):
             cards_mod = cards
             for c in newcards:
                 cards_mod = cards_mod.replace('J', c, 1)
