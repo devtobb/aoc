@@ -11,19 +11,16 @@ class Hand(object):
         self.cards, bid = line.split()
         self.bid = int(bid)
 
-    def _type(self, joker):
+    def order(self, joker=False):
         cards = self.cards.replace('J', '') if joker else self.cards
         counter = Counter(cards)
         frequencies = sorted(counter.values(), reverse=True)
         most_frequent, second_most_frequent, *_ = frequencies + [0, 0]
         most_frequent += joker * self.cards.count('J')
-        return (most_frequent << 1) + second_most_frequent
-
-    def order(self, joker=False):
-        o = self._type(joker)
+        order = (most_frequent << 1) + second_most_frequent
         for card in self.cards:
-            o = (o << 4) + ORDER[joker].index(card)
-        return o
+            order = (order << 4) + ORDER[joker].index(card)
+        return order
         
 def score(hands, joker):
     hands = sorted(hands, key=lambda h: h.order(joker))
