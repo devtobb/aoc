@@ -5,10 +5,10 @@ from math import lcm
 
 from tools import read_input
 
-def n_steps(start, stop):
+def n_steps(pos, stop):
     for n, i in enumerate(cycle(instr), 1):
-        start = nodes[start][i]
-        if stop(start):
+        pos = nodes[pos][i]
+        if stop(pos):
             return n
 
 def puzzle1():
