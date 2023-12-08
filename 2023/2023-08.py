@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 
 from itertools import cycle
+from functools import reduce
 from math import lcm
 
 from tools import read_input
 
 def n_steps(start, nodes, instr, stop):
-    n = 0
-    for i in cycle(instr):
+    for n, i in enumerate(cycle(instr), 1):
         start = nodes[start][i]
-        n += 1
         if stop(start):
             return n
 
