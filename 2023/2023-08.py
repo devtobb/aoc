@@ -15,7 +15,9 @@ def puzzle1():
     return n_steps('AAA', lambda p: p=='ZZZ')
 
 def puzzle2():
-    return lcm(*(n_steps(start, lambda p: p.endswith('Z')) for start in nodes.keys() if start.endswith('A')))
+    starts = [pos for pos in nodes.keys() if pos.endswith('A')]
+    steps = [n_steps(p, lambda p: p.endswith('Z')) for p in starts]
+    return lcm(*steps)
 
 raw = read_input(2023, 8)
 instr, nodes = raw.split('\n\n')
