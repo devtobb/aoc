@@ -1,14 +1,22 @@
 import os
 import pathlib
-
-CACHE_FOLDER = "input_cache"
-CACHE_FILENAME = "input-{year}-{day:02d}{suffix}.txt"
+import re
 
 class blist(list):
     def __rshift__(self, other):
         return blist(map(other, self))
+list = blist
+
+def ints(line):
+    return blist(map(int, re.findall(r'-?\d+', line)))
+
+def words(line):
+    return blist(re.findall(r'\w+', line))
 
 def read_input(year: int, day: int, suffix: str = "") -> str:
+    CACHE_FOLDER = "input_cache"
+    CACHE_FILENAME = "input-{year}-{day:02d}{suffix}.txt"
+
     # create cache pah if it doesn't exist
     path = os.path.dirname(__file__)
     path = os.path.join(path, CACHE_FOLDER)
