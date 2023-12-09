@@ -5,8 +5,7 @@ from tools import *
 def interp(hist):
     if not any(hist):
         return (0, 0)
-    (*head, _), (_, *tail) = hist, hist
-    deriv = list( b-a for a, b in zip(head, tail))
+    deriv = list( b-a for a, b in zip(hist[:-1], hist[1:]))
     front, back = interp(deriv)
     return hist[0] - front, hist[-1] + back
 
