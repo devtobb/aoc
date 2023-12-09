@@ -15,7 +15,7 @@ def puzzle1(values):
 def puzzle2(values):
     return sum(front for front, _ in values)
 
-raw = read_input(2023, 9, 'bb')
+raw = read_input(2023, 9)
 hists = blist(map(ints, raw.splitlines()))
 values = hists >> interp
 
