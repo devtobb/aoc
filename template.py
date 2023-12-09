@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from tools import read_input
+from tools import *
 
 def puzzle1():
     pass
