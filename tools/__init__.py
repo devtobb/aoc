@@ -5,7 +5,6 @@ import re
 class blist(list):
     def __rshift__(self, other):
         return blist(map(other, self))
-list = blist
 
 def ints(line):
     return blist(map(int, re.findall(r'-?\d+', line)))
