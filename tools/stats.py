@@ -9,10 +9,18 @@ import matplotlib.pyplot as plt
 import requests
 import yaml
 
+last_position = -1
+
 def row_to_user(row):
+    global last_position
     try:
-        position = int(re.sub(r"\D", "", row.find('span', {'class': 'privboard-position'}).decode_contents()))
-        score = int(re.sub(r"\D", "", row.find('span', {'class': 'privboard-position'}).find_next_sibling(string=True)))
+        position = int(re.sub(r"\D", "", row.find('span', {'class': 'privboard-position'}).decode_contents())) 
+        last_position = position
+    except:
+        position = last_position
+    
+    try:
+        score = int(re.sub(r"\D", "", row.find('span', {'class': 'privboard-star-both'}).find_previous_sibling(string=True)))
         name = row.find('span', {'class': 'privboard-name'}).decode_contents().strip()
 
         return dict(
