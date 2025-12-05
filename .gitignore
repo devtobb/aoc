@@ -2,3 +2,4 @@
 __pycache__
 cookies.yaml
 input_cache
+.venv
